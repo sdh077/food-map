@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.19.2",
     "@react-hooks-library/core": "^0.6.0",
     "@supabase/supabase-js": "^2.39.3",
     "flowbite-react": "^0.7.2",
