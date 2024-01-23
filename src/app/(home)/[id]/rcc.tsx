@@ -50,7 +50,12 @@ const CafeCard = ({ cafe }: { cafe: Cafe }) => {
     }
     return (
         <a onClick={() => choice(cafe.id)} >
-            <Card
+            <Image
+                src={`/images/${cafe.name ?? 'anthracite'}.jpeg`} alt="Picture of the author"
+                width={'300'}
+                height={250}
+            />
+            {/* <Card
                 renderImage={() =>
                     <div style={{ position: 'relative', width: '100%', height: '250px' }}>
                         <Image
@@ -68,7 +73,7 @@ const CafeCard = ({ cafe }: { cafe: Cafe }) => {
                 <p className="text-md font-normal text-gray-700 dark:text-gray-400">
                     {cafe.address}
                 </p>
-            </Card>
+            </Card> */}
         </a >
     );
 }
