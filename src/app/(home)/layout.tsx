@@ -78,7 +78,7 @@ function DocsNavbar({ isCollapsed, setCollapsed }: DocsLayoutState) {
           className="flex items-center gap-3 text-2xl font-semibold text-gray-900 dark:text-white"
         >
           {/* <Image alt="" height={32} src="/favicon.svg" width={32} className="h-8 w-8" /> */}
-          <span>foodyinkorea</span>
+          <span>food map</span>
         </Link>
         <div className="ml-4 hidden lg:flex">
           {/* <DocSearchInput /> */}
