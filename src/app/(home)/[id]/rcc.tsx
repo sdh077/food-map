@@ -20,11 +20,11 @@ export default function List({ data }: { data: Cafe[] }) {
         scrollProgress.current.style.top = scrollY > 100 ? '0' : '100px'
     })
     return (
-        <div className="flex" ref={box}>
-            <div className="w-[58vw]">
+        <div className="md:flex" ref={box}>
+            <div ref={scrollProgress} className={`w-full md:w-[42vw] md:fixed right-0`}><GoogleMap locations={data} /></div>
+            <div className="w-full md:w-[58vw]">
                 <CafeList cafes={data} setChoice={setChoice} />
             </div>
-            <div ref={scrollProgress} className={`w-[42vw] fixed right-0`}><GoogleMap locations={data} /></div>
         </div>
     )
 }
@@ -66,7 +66,7 @@ const CafeCard = ({ cafe }: { cafe: Cafe }) => {
                     {cafe.name}
                 </h5>
                 <p className="text-md font-normal text-gray-700 dark:text-gray-400">
-                    {cafe.description}
+                    {cafe.address}
                 </p>
             </Card>
         </a >
