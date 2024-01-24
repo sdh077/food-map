@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { Local } from "@/interface/local";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useScroll } from '@react-hooks-library/core'
+import NaverMap from "@/components/NaverMap";
 
 export default function List({ data }: { data: Cafe[] }) {
     const [choice, setChoice] = useState(0)
@@ -21,7 +22,7 @@ export default function List({ data }: { data: Cafe[] }) {
     })
     return (
         <div className="md:flex" ref={box}>
-            <div ref={scrollProgress} className={`w-full md:w-[42vw] md:fixed right-0`}><GoogleMap locations={data} /></div>
+            <div ref={scrollProgress} className={`w-full md:w-[42vw] md:fixed right-0`}><NaverMap locations={data} /></div>
             <div className="w-full md:w-[58vw]">
                 <CafeList cafes={data} setChoice={setChoice} />
             </div>
@@ -44,17 +45,27 @@ const CafeCard = ({ cafe }: { cafe: Cafe }) => {
     const router = useRouter()
     const searchParams = useSearchParams()
     const params = new URLSearchParams(searchParams.toString())
+    const [isHovered, setHovered] = useState(false);
     const choice = (id: number | null) => {
         const url = `${id}?${params.toString()}`
         router.push(url, { scroll: false })
     }
     return (
-        <a onClick={() => choice(cafe.id)} >
+        <a onClick={() => choice(cafe.id)}
+            className="relative group"
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+        >
             <Image
                 src={`/images/${cafe.name ?? 'anthracite'}.jpeg`} alt="Picture of the author"
                 width={'300'}
                 height={250}
             />
+            {isHovered && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-25">
+                    <p className="text-white">{cafe.name}</p>
+                </div>
+            )}
             {/* <Card
                 renderImage={() =>
                     <div style={{ position: 'relative', width: '100%', height: '250px' }}>
@@ -77,6 +88,7 @@ const CafeCard = ({ cafe }: { cafe: Cafe }) => {
         </a >
     );
 }
+
 const VideoView = ({ data }: { data: string }) => {
     return (
         <div className="relative flex items-center justify-center h-[94vh] overflow-hidden">
