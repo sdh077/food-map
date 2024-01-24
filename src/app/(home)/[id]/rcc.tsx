@@ -1,13 +1,8 @@
 'use client'
-import GoogleMap from "@/components/GoogleMap"
-import { useScreen } from 'usehooks-ts'
-import Link from "next/link"
-import { Card } from 'flowbite-react';
 import { Cafe } from "@/interface/cafe";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import Image from 'next/image';
-import { Local } from "@/interface/local";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useScroll } from '@react-hooks-library/core'
 import NaverMap from "@/components/NaverMap";
 

@@ -1,9 +1,7 @@
-import { ILocation } from "@/interface/location"
 import { Cafe } from "@/interface/cafe";
 import List from "./rcc";
 import { supabase } from "@/lib/api";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-import { Local } from "@/interface/local";
 
 const getData = async (localId: string | null, subId: string): Promise<PostgrestSingleResponse<Cafe[]>> => {
     if (subId) return await supabase.from('cafe').select('*').eq('sub_id', subId).returns<Cafe[]>()
