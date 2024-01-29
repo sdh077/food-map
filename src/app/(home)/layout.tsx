@@ -13,6 +13,7 @@ import { isClient } from '@/helpers/is-client';
 import { Banner, Navbar, Sidebar, Accordion, Badge } from 'flowbite-react';
 import { NavbarLinks, NavbarIcons } from '@/components/navbar';
 import NewBadge from '@/components/NewBadege';
+import { Providers } from '@/redux/provider';
 
 interface DocsLayoutState {
   isCollapsed: boolean;
@@ -28,13 +29,15 @@ export default function DocsLayout({ children }: PropsWithChildren) {
   };
 
   return (
-    <div className="w-full min-w-0 flex-auto">
-      <div className="relative bg-white text-gray-600 antialiased dark:bg-gray-900 dark:text-gray-400">
-        <Banner />
-        <DocsNavbar {...state} />
+    <Providers>
+      <div className="w-full min-w-0 flex-auto">
+        <div className="relative bg-white text-gray-600 antialiased dark:bg-gray-900 dark:text-gray-400">
+          <Banner />
+          <DocsNavbar {...state} />
+        </div>
+        {children}
       </div>
-      {children}
-    </div>
+    </Providers>
   );
 }
 

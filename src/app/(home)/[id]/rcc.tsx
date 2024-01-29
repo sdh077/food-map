@@ -1,35 +1,51 @@
 'use client'
 import { Cafe } from "@/interface/cafe";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import Image from 'next/image';
 import { useRouter, useSearchParams } from "next/navigation";
 import { useScroll } from '@react-hooks-library/core'
-import NaverMap from "@/components/NaverMap";
+import NaverMapComponent, { NaverMap } from "@/components/NaverMap";
+import { useGetCafeQuery } from "@/redux/services/cafeApi";
 
-export default function List({ data }: { data: Cafe[] }) {
-    const [choice, setChoice] = useState(0)
+export default function List({ localId, subId }: { localId: string, subId: string }) {
+    const { isLoading, isFetching, data, error } = useGetCafeQuery({ localId, subId });
+    const [scroll, setScroll] = useState('')
+    const mapRef = useRef<NaverMap | null>(null);
+    useEffect(() => {
+        //add eventlistener to window
+        window.addEventListener('scroll', onScroll, { passive: true })
+        // remove event on unmount to prevent a memory leak with the cleanup
+        return () => {
+            window.removeEventListener('scroll', onScroll)
+        }
+    }, [])
+    const onScroll = useCallback(() => {
+        const { scrollY } = window
+        if (scrollY >= 48) {
+            setScroll('top-0')
+        } else setScroll('')
+    }, [])
+
     const scrollProgress = useRef<HTMLDivElement | null>(null)
-    const box = useRef<HTMLDivElement | null>(null)
-
-    useScroll(box, ({ scrollX, scrollY }) => {
-        if (!scrollProgress.current) return
-        scrollProgress.current.style.top = scrollY > 100 ? '0' : '100px'
-    })
-    return (
-        <div className="md:flex" ref={box}>
-            <div ref={scrollProgress} className={`w-full md:w-[42vw] md:fixed right-0`}><NaverMap locations={data} /></div>
-            <div className="w-full md:w-[58vw]">
-                <CafeList cafes={data} setChoice={setChoice} />
+    if (error) return <></>
+    if (data)
+        return (
+            <div className="md:flex relative" ref={scrollProgress}>
+                <div className="md:sticky">
+                    <div ref={scrollProgress} className={`w-full md:w-[42vw] md:fixed right-0 ${scroll}`}><NaverMapComponent locations={data.data} mapRef={mapRef} /></div>
+                </div>
+                <div className="w-full md:w-[58vw]">
+                    <CafeList cafes={data.data} />
+                </div>
             </div>
-        </div>
-    )
+        )
 }
 
-const CafeList = ({ cafes, setChoice }: { cafes: Cafe[], setChoice: Dispatch<SetStateAction<number>> }) => {
+const CafeList = ({ cafes }: { cafes: Cafe[] }) => {
     return (
         <ul role="list" className="divide-y divide-gray-100 grid grid-cols-3 gap-4">
             {cafes.map((cafe, index) => (
-                <li key={cafe.id} className="" onClick={() => setChoice(index)}>
+                <li key={cafe.id} className="">
                     <CafeCard cafe={cafe} />
                 </li>
             ))}
